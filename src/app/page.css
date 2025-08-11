@@ -1,0 +1,11 @@
+.main-container {
+  min-height: 100vh;
+  padding-top: var(--header-height);
+}
+
+.content-container {
+  width: 100%;
+  max-width: var(--container-width);
+  margin: 0 auto;
+  padding: 1rem var(--container-padding);
+}
