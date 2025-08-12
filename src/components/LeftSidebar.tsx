@@ -142,7 +142,7 @@ export default function LeftSidebar() {
                     )}
                   </div>
                   <button className="create-now-btn" onClick={handleCreatePalette}>
-                    Create Now!
+                    Create Color Palette
                   </button>
                 </div>
               ) : (

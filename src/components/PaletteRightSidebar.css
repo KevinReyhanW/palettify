@@ -55,17 +55,21 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  background: var(--background);
   padding: 1.5rem;
   border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease;
   cursor: pointer;
+  backdrop-filter: blur(8px);
+  background: rgba(255, 255, 255, 0.07);
 }
 
 .palette-set:not(.disabled):hover {
   transform: translateY(-5px) !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
 }
 
 .palette-set.disabled {

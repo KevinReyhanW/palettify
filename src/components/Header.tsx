@@ -18,13 +18,13 @@ export default function Header({ onCreatePalette }: HeaderProps) {
           <h1 className="header-title">
             Palettify
           </h1>
-          <button
+          {/* <button
             onClick={onCreatePalette}
             className="create-palette-btn"
             aria-label="Create new palette"
           >
             Create Your Palette
-          </button>
+          </button> */}
         </div>
         <button
           onClick={toggleTheme}
