@@ -132,10 +132,13 @@
 @media (max-width: 768px) {
   .web-preview {
     padding: 1rem;
+    margin: 1rem auto;
   }
 
   .preview-container {
     padding: 1.5rem;
+    min-height: auto;
+    gap: 1.5rem;
   }
 
   .preview-nav {
@@ -143,6 +146,25 @@
   }
 
   .preview-title {
-    font-size: 2rem;
+    font-size: 1.75rem;
+  }
+
+  .preview-subtitle {
+    font-size: 1rem;
+  }
+
+  .preview-section {
+    gap: 1rem;
+  }
+
+  .preview-card {
+    height: 150px;
+  }
+
+  .preview-footer {
+    padding-top: 1.5rem;
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
   }
 }

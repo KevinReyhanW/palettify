@@ -3,13 +3,15 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useColorPalette } from '@/context/ColorPaletteContext';
 import { useState } from 'react';
-import './PaletteCarousel.css';
+import { ChevronRightIcon, ChevronLeftIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
+import './PaletteRightSidebar.css';
 
-const PALETTES_PER_PAGE = 5;
+const PALETTES_PER_PAGE = 3;
 
-export default function PaletteCarousel() {
+export default function PaletteRightSidebar() {
   const { palettes, currentPaletteIndex, setCurrentPaletteIndex } = useColorPalette();
   const [page, setPage] = useState(0);
+  const [isOpen, setIsOpen] = useState(true);
 
   const totalPages = Math.ceil(palettes.length / PALETTES_PER_PAGE);
   const startIndex = page * PALETTES_PER_PAGE;
@@ -33,14 +35,24 @@ export default function PaletteCarousel() {
   };
 
   return (
-    <div className="palette-carousel">
+    <div className={`palette-right-sidebar ${isOpen ? 'open' : 'closed'}`}>
+      <button 
+        className="toggle-button"
+        onClick={() => setIsOpen(!isOpen)}
+        aria-label={isOpen ? 'Close palette sidebar' : 'Open palette sidebar'}
+      >
+        {window.innerWidth <= 768 
+          ? (isOpen ? <ChevronDownIcon className="w-6 h-6" /> : <ChevronUpIcon className="w-6 h-6" />)
+          : (isOpen ? <ChevronRightIcon className="w-6 h-6" /> : <ChevronLeftIcon className="w-6 h-6" />)
+        }
+      </button>
       <AnimatePresence mode="wait">
         <motion.div
           key={page}
           className="palette-container"
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.3 }}
         >
           {currentPalettes.map((palette, index) => (

@@ -1,7 +1,8 @@
 'use client';
 
 import Header from '@/components/Header';
-import PaletteCarousel from '@/components/PaletteCarousel';
+import LeftSidebar from '@/components/LeftSidebar';
+import PaletteRightSidebar from '@/components/PaletteRightSidebar';
 import WebPreview from '@/components/WebPreview';
 import './page.css';
 
@@ -10,7 +11,8 @@ export default function Home() {
     <main className="main-container">
       <Header />
       <div className="content-container">
-        <PaletteCarousel />
+        <LeftSidebar />
+        <PaletteRightSidebar />
         <WebPreview />
       </div>
     </main>
