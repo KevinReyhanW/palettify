@@ -4,8 +4,8 @@ import { useColorPalette } from '@/context/ColorPaletteContext';
 import './WebPreview.css';
 
 export default function WebPreview() {
-  const { palettes, currentPaletteIndex } = useColorPalette();
-  const currentPalette = palettes[currentPaletteIndex].colors;
+  const { previewColors } = useColorPalette();
+  const currentPalette = previewColors;
 
   return (
     <div className="web-preview">

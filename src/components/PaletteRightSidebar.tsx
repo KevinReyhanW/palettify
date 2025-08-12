@@ -2,16 +2,33 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useColorPalette } from '@/context/ColorPaletteContext';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronRightIcon, ChevronLeftIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 import './PaletteRightSidebar.css';
 
-const PALETTES_PER_PAGE = 3;
+const PALETTES_PER_PAGE = 5;
+const MOBILE_BREAKPOINT = 768;
 
 export default function PaletteRightSidebar() {
-  const { palettes, currentPaletteIndex, setCurrentPaletteIndex } = useColorPalette();
+  const { palettes, currentPaletteIndex, setCurrentPaletteIndex, setPreviewColors, isCreatingPalette } = useColorPalette();
   const [page, setPage] = useState(0);
   const [isOpen, setIsOpen] = useState(true);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+    };
+    
+    // Check initially
+    checkIsMobile();
+    
+    // Add event listener for window resize
+    window.addEventListener('resize', checkIsMobile);
+    
+    // Cleanup
+    return () => window.removeEventListener('resize', checkIsMobile);
+  }, []);
 
   const totalPages = Math.ceil(palettes.length / PALETTES_PER_PAGE);
   const startIndex = page * PALETTES_PER_PAGE;
@@ -31,7 +48,9 @@ export default function PaletteRightSidebar() {
   };
 
   const handlePaletteClick = (index: number) => {
+    if (isCreatingPalette) return;
     setCurrentPaletteIndex(startIndex + index);
+    setPreviewColors(palettes[startIndex + index].colors);
   };
 
   return (
@@ -41,7 +60,7 @@ export default function PaletteRightSidebar() {
         onClick={() => setIsOpen(!isOpen)}
         aria-label={isOpen ? 'Close palette sidebar' : 'Open palette sidebar'}
       >
-        {window.innerWidth <= 768 
+        {isMobile
           ? (isOpen ? <ChevronDownIcon className="w-6 h-6" /> : <ChevronUpIcon className="w-6 h-6" />)
           : (isOpen ? <ChevronRightIcon className="w-6 h-6" /> : <ChevronLeftIcon className="w-6 h-6" />)
         }
@@ -58,29 +77,53 @@ export default function PaletteRightSidebar() {
           {currentPalettes.map((palette, index) => (
             <div
               key={startIndex + index}
-              className="palette-set"
+              className={`palette-set ${isCreatingPalette ? 'disabled' : ''}`}
               onClick={() => handlePaletteClick(index)}
               style={{ 
-                opacity: startIndex + index === currentPaletteIndex ? 1 : 0.7,
-                transform: startIndex + index === currentPaletteIndex ? 'scale(1.02)' : 'scale(1)'
+                opacity: (startIndex + index === currentPaletteIndex && !isCreatingPalette) ? 1 : 0.7,
+                transform: (startIndex + index === currentPaletteIndex && !isCreatingPalette) ? 'scale(1.02)' : 'scale(1)',
+                cursor: isCreatingPalette ? 'not-allowed' : 'pointer'
               }}
             >
               <div className="palette-info">
-                <h3 className="palette-name">{palette.name}</h3>
-                <p className="palette-description">{palette.description}</p>
+                <div className="palette-header">
+                  <h3 className="palette-name">{palette.name}</h3>
+                  <button
+                    className="copy-css-button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      const semanticNames = ['background', 'foreground', 'primary', 'secondary', 'accent'];
+                      const cssVars = palette.colors.map((color, idx) => 
+                        `  --${idx < semanticNames.length ? semanticNames[idx] : `color-${idx + 1}`}: ${color};`
+                      ).join('\n');
+                      const css = `:root {\n${cssVars}\n}`;
+                      navigator.clipboard.writeText(css);
+                    }}
+                    title="Copy CSS Variables"
+                  >
+                    Copy CSS
+                  </button>
+                </div>
               </div>
               <div className="palette-colors">
-                {palette.colors.map((color, colorIndex) => (
-                  <div
-                    key={colorIndex}
-                    className="color-swatch"
-                    style={{ backgroundColor: color }}
-                    title={color}
-                    suppressHydrationWarning
-                  >
-                    <span className="color-hex">{color}</span>
-                  </div>
-                ))}
+                {palette.colors.map((color, colorIndex) => {
+                  const semanticNames = ['background', 'foreground', 'primary', 'secondary', 'accent'];
+                  const semanticName = colorIndex < semanticNames.length ? semanticNames[colorIndex] : `color-${colorIndex + 1}`;
+                  return (
+                    <div
+                      key={colorIndex}
+                      className="color-swatch"
+                      style={{ backgroundColor: color }}
+                      title={`${semanticName}: ${color}`}
+                      suppressHydrationWarning
+                    >
+                      <div className="color-info">
+                        <span className="color-hex">{color}</span>
+                        <span className="color-semantic-name">{semanticName}</span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           ))}
