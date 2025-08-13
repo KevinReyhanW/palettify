@@ -7,6 +7,7 @@ import './LeftSidebar.css';
 
 import { HexColorPicker } from 'react-colorful';
 import { useColorPalette } from '@/context/ColorPaletteContext';
+import { generateHarmonizedPalette } from '@/utils/colorUtils';
 
 interface PaletteCreationStep {
   title: string;
@@ -29,6 +30,7 @@ export default function LeftSidebar() {
   const [paletteName, setPaletteName] = useState('');
   const [savedPalettes, setSavedPalettes] = useState<Array<{ name: string, colors: string[] }>>([]);
   const [showPalettes, setShowPalettes] = useState(true);
+  const [harmonizeEnabled, setHarmonizeEnabled] = useState(false);
   const { setPreviewColors, setIsCreatingPalette, addPalette } = useColorPalette();
 
   const handleCreatePalette = () => {
@@ -43,6 +45,13 @@ export default function LeftSidebar() {
   const handleColorChange = (color: string) => {
     const newColors = [...colors];
     newColors[currentColorIndex] = color;
+    
+    // Generate harmonized palette if enabled and this is the first color
+    if (harmonizeEnabled && currentColorIndex === 0) {
+      const harmonizedColors = generateHarmonizedPalette(color);
+      newColors.splice(0, harmonizedColors.length, ...harmonizedColors);
+    }
+    
     setColors(newColors);
     setPreviewColors(newColors);
   };
@@ -154,6 +163,16 @@ export default function LeftSidebar() {
                     <div className="palette-creation-container">
                       <div className="color-picker-container">
                         <h3>Pick Color {currentColorIndex + 1}</h3>
+                        <div className="harmonizer-toggle">
+                          <label>
+                            <input
+                              type="checkbox"
+                              checked={harmonizeEnabled}
+                              onChange={(e) => setHarmonizeEnabled(e.target.checked)}
+                            />
+                            Auto-harmonize colors
+                          </label>
+                        </div>
                         <HexColorPicker 
                           color={colors[currentColorIndex]} 
                           onChange={handleColorChange} 

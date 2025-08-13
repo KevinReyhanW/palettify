@@ -15,6 +15,29 @@
   box-shadow: none;
 }
 
+.harmonizer-toggle {
+  margin: 0.5rem 0;
+  padding: 0.5rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.harmonizer-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  color: var(--foreground);
+}
+
+.harmonizer-toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: var(--primary);
+}
+
 .left-sidebar-toggle {
   position: fixed;
   left: 300px;

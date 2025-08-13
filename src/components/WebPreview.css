@@ -18,6 +18,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.preview-footer span:hover {
+  opacity: 1 !important;
   padding: 1rem 0;
 }
 
