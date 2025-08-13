@@ -28,6 +28,9 @@
 
 .header-title {
   font-size: 1.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   font-weight: 800;
   color: var(--foreground);
   letter-spacing: -0.5px;

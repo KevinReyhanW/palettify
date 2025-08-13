@@ -2,6 +2,8 @@
 
 import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 import { useTheme } from '@/context/ThemeContext';
+import Image from 'next/image';
+import logoImage from '@/assets/logo/favicon-32x32.png';
 import './Header.css';
 
 interface HeaderProps {
@@ -16,6 +18,13 @@ export default function Header({ onCreatePalette }: HeaderProps) {
       <div className="header-content">
         <div className="header-left">
           <h1 className="header-title">
+            <Image
+              src={logoImage}
+              alt="Palettify Logo"
+              width={32}
+              height={32}
+              className="header-logo"
+            />
             Palettify
           </h1>
           {/* <button
