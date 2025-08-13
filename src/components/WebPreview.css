@@ -42,7 +42,6 @@
 }
 
 .preview-content {
-  background: var(--background-color);
   min-height: 500px;
   width: 100%;
 }

@@ -1,111 +1,146 @@
 'use client';
-
+import { useState } from 'react';
+import { User, BookOpen, Clock, Home, PenTool, Sparkles } from 'lucide-react';
 import './ModernBlog.css';
 
 export function ModernBlog() {
+  const [activeTab, setActiveTab] = useState('home');
+  const [activeContent, setActiveContent] = useState('home');
+
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
+    setActiveContent(tab);
+  };
+
   return (
     <div className="modern-blog">
       <header className="blog-header">
         <div className="header-content">
-          <div className="logo">Mindful<span>Blog</span></div>
+          <div className="logo">
+            <PenTool size={20} color="var(--accent-color)" />
+            <span>PaletteBlog</span>
+          </div>
           <nav className="main-nav">
             <ul className="nav-links">
-              <li className="active">Home</li>
-              <li>Articles</li>
-              <li>Topics</li>
-              <li>About</li>
-              <li>Contact</li>
+              <li 
+                className={activeTab === 'home' ? 'active' : ''}
+                onClick={() => handleTabClick('home')}
+              >
+                <Home size={18} />
+                <span>Home</span>
+              </li>
+              <li 
+                className={activeTab === 'articles' ? 'active' : ''}
+                onClick={() => handleTabClick('articles')}
+              >
+                <BookOpen size={18} />
+                <span>Articles</span>
+              </li>
+              <li 
+                className={activeTab === 'about' ? 'active' : ''}
+                onClick={() => handleTabClick('about')}
+              >
+                <User size={18} />
+                <span>About</span>
+              </li>
             </ul>
           </nav>
         </div>
       </header>
       
       <main className="blog-content">
-        <section className="hero-section">
-          <div className="hero-content">
-            <h1 className="hero-title">Thoughtful Insights for Creative Minds</h1>
-            <p className="hero-subtitle">Exploring the intersection of design, technology, and human experience through thoughtful writing.</p>
-            <button className="cta-button">Browse Articles</button>
-          </div>
-        </section>
+        {activeContent === 'home' && (
+          <>
+            <section className="hero-section">
+              <div className="hero-content">
+                <h1 className="hero-title">Design Insights & Color Theory</h1>
+                <p className="hero-subtitle">Expert perspectives on visual design and color psychology</p>
+                <button className="cta-button">
+                  Read Latest
+                  
+                </button>
+              </div>
+            </section>
 
-        <section className="featured-section">
-          <h2 className="section-title">Featured Content</h2>
-          <div className="featured-grid">
-            <article className="featured-card">
-              <div className="card-image"></div>
-              <div className="card-content">
-                <span className="card-category">Design</span>
-                <h3>The Psychology of Minimalism in UI Design</h3>
-                <p>Exploring how minimal interfaces affect user behavior and perception in digital products.</p>
-                <div className="card-meta">
-                  <span>12 min read</span>
-                  <span>•</span>
-                  <span>May 15, 2023</span>
+            <section className="featured-section">
+              <div className="featured-card">
+                <div className="card-content">
+                  <div className="card-header">
+                    <BookOpen size={16} color="var(--accent-color)" />
+                    <span className="card-category">Featured</span>
+                  </div>
+                  <h3>The Psychology Behind Effective Color Palettes</h3>
+                  <p>How color combinations influence user perception and behavior in digital products.</p>
+                  <div className="card-meta">
+                    <Clock size={14} color="var(--foreground-color)" opacity={0.6} />
+                    <span>5 min read</span>
+                  </div>
                 </div>
               </div>
-            </article>
+            </section>
+          </>
+        )}
 
-            <article className="featured-card">
-              <div className="card-image"></div>
-              <div className="card-content">
-                <span className="card-category">Technology</span>
-                <h3>Emerging Trends in Web Development for 2023</h3>
-                <p>An analysis of the most impactful technologies shaping the future of web experiences.</p>
-                <div className="card-meta">
-                  <span>8 min read</span>
-                  <span>•</span>
-                  <span>April 28, 2023</span>
+        {activeContent === 'articles' && (
+          <section className="articles-section">
+            <h2 className="section-title">
+              <BookOpen size={24} color="var(--accent-color)" />
+              <span>Latest Articles</span>
+            </h2>
+            <div className="article-list">
+              <div className="article-item">
+                <div className="article-content">
+                  <div className="article-header">
+                    <PenTool size={16} color="var(--accent-color)" />
+                    <h3>Color Contrast for Accessibility</h3>
+                  </div>
+                  <p>Learn how to create accessible designs with proper color contrast ratios.</p>
+                  <div className="article-meta">
+                    <Clock size={14} color="var(--foreground-color)" opacity={0.6} />
+                    <span>8 min read</span>
+                  </div>
                 </div>
               </div>
-            </article>
-
-            <article className="featured-card">
-              <div className="card-image"></div>
-              <div className="card-content">
-                <span className="card-category">Productivity</span>
-                <h3>Deep Work in the Age of Distraction</h3>
-                <p>Strategies for maintaining focus and producing meaningful work in our connected world.</p>
-                <div className="card-meta">
-                  <span>10 min read</span>
-                  <span>•</span>
-                  <span>March 22, 2023</span>
+              <div className="article-item">
+                <div className="article-content">
+                  <div className="article-header">
+                    <PenTool size={16} color="var(--accent-color)" />
+                    <h3>Dark Mode Design Principles</h3>
+                  </div>
+                  <p>Best practices for implementing dark mode in your applications.</p>
+                  <div className="article-meta">
+                    <Clock size={14} color="var(--foreground-color)" opacity={0.6} />
+                    <span>6 min read</span>
+                  </div>
                 </div>
               </div>
-            </article>
-          </div>
-        </section>
+            </div>
+          </section>
+        )}
+
+        {activeContent === 'about' && (
+          <section className="about-section">
+            <div className="author-avatar">
+              <User size={48} color="var(--accent-color)" />
+            </div>
+            <h2 className="section-title">About PaletteBlog</h2>
+            <p className="about-text">
+              We're dedicated to exploring the world of color theory and design principles. 
+              Our mission is to help designers create more effective and beautiful interfaces.
+            </p>
+            <div className="about-meta">
+              <span className="meta-item">
+                <Sparkles size={16} color="var(--accent-color)" />
+                <span>Founded 2023</span>
+              </span>
+              <span className="meta-item">
+                <BookOpen size={16} color="var(--accent-color)" />
+                <span>50+ Articles</span>
+              </span>
+            </div>
+          </section>
+        )}
       </main>
-
-      <footer className="blog-footer">
-        <div className="footer-content">
-          <div className="footer-brand">
-            <div className="logo">Mindful<span>Blog</span></div>
-            <p>Thoughtful content for curious minds.</p>
-          </div>
-          <div className="footer-links">
-            <div className="link-group">
-              <h4>Explore</h4>
-              <ul>
-                <li>All Articles</li>
-                <li>Popular</li>
-                <li>Topics</li>
-              </ul>
-            </div>
-            <div className="link-group">
-              <h4>Connect</h4>
-              <ul>
-                <li>Twitter</li>
-                <li>LinkedIn</li>
-                <li>Newsletter</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div className="footer-copyright">
-          <p>© 2023 MindfulBlog. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 }
