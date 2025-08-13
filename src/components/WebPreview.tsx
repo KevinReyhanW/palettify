@@ -9,9 +9,16 @@ export default function WebPreview() {
 
   return (
     <div className="web-preview">
-      <div 
+      <div
         className="preview-container"
-        style={{ backgroundColor: currentPalette[0] }} // background
+        style={{
+          backgroundColor: currentPalette[0],
+          '--background-color': currentPalette[0],
+          '--foreground-color': currentPalette[1],
+          '--primary-color': currentPalette[2],
+          '--secondary-color': currentPalette[3],
+          '--accent-color': currentPalette[4],
+        } as React.CSSProperties} // background
         suppressHydrationWarning
       >
         <header className="preview-header">
@@ -21,7 +28,7 @@ export default function WebPreview() {
               <div
                 key={item}
                 className="preview-nav-item"
-                style={{ 
+                style={{
                   color: currentPalette[1], // foreground
                   backgroundColor: item === 'Home' ? currentPalette[2] : 'transparent', // primary
                   ...(item === 'Home' ? { color: currentPalette[0] } : {}) // if active, use background color for text
@@ -35,17 +42,17 @@ export default function WebPreview() {
 
         <main className="preview-main">
           <div className="preview-section">
-            <h1 
+            <h1
               className="preview-title"
               style={{ color: currentPalette[1] }} // foreground
             >
               Transform Your Website with Perfect Colors
             </h1>
-            <p 
+            <p
               className="preview-subtitle"
               style={{ color: currentPalette[1], opacity: 0.9 }} // foreground with slight transparency
             >
-              See how your brand could look with this carefully crafted color palette. 
+              See how your brand could look with this carefully crafted color palette.
               Experience the perfect balance of aesthetics and functionality.
             </p>
             <div className="preview-form">
@@ -53,7 +60,7 @@ export default function WebPreview() {
                 type="email"
                 placeholder="Enter your email"
                 className="preview-input"
-                style={{ 
+                style={{
                   backgroundColor: 'transparent',
                   color: currentPalette[1], // foreground
                   borderColor: currentPalette[3], // secondary
@@ -62,10 +69,11 @@ export default function WebPreview() {
               />
               <button
                 className="preview-button"
-                style={{ 
+                style={{
                   backgroundColor: currentPalette[2], // primary
                   color: currentPalette[0], // background
-                  boxShadow: `0 4px 12px ${currentPalette[2]}40` // primary with transparency
+                  boxShadow: `0 4px 12px ${currentPalette[2]}40`, // primary with transparency
+                  border: `2px solid ${currentPalette[4]}`, // accent color border
                 }}
               >
                 Get Started
@@ -74,23 +82,23 @@ export default function WebPreview() {
           </div>
 
           <div className="preview-section">
-            <div 
+            <div
               className="preview-card"
-              style={{ 
+              style={{
                 backgroundColor: currentPalette[3], // secondary
                 boxShadow: `0 8px 24px ${currentPalette[3]}30` // secondary with transparency
               }}
             >
-              <h3 style={{ 
+              <h3 style={{
                 color: currentPalette[0], // background
                 fontSize: '1.5rem',
                 marginBottom: '1rem'
               }}>
                 Color Psychology
               </h3>
-              <p style={{ 
+              <p style={{
                 color: currentPalette[0], // background
-                opacity: 0.9 
+                opacity: 0.9
               }}>
                 Colors influence emotions and behaviors. Choose the right palette to convey your message effectively.
               </p>
@@ -99,15 +107,15 @@ export default function WebPreview() {
         </main>
 
         <footer className="preview-footer">
-          <div style={{ 
+          <div style={{
             color: currentPalette[1], // foreground
-            opacity: 0.7 
+            opacity: 0.7
           }}>
             © 2025 Your Brand. All rights reserved.
           </div>
-          <div 
-            style={{ 
-              display: 'flex', 
+          <div
+            style={{
+              display: 'flex',
               gap: '1rem'
             }}
           >
@@ -118,7 +126,6 @@ export default function WebPreview() {
                   color: currentPalette[1], // foreground
                   opacity: 0.7,
                   cursor: 'pointer',
-                  transition: 'all 0.2s ease'
                 }}
               >
                 {item}

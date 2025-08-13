@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/outline';
+import { ChevronLeftIcon, ChevronRightIcon, SparklesIcon, TrashIcon } from '@heroicons/react/24/outline';
 import './LeftSidebar.css';
 
 import { HexColorPicker } from 'react-colorful';
@@ -30,8 +30,11 @@ export default function LeftSidebar() {
   const [paletteName, setPaletteName] = useState('');
   const [savedPalettes, setSavedPalettes] = useState<Array<{ name: string, colors: string[] }>>([]);
   const [showPalettes, setShowPalettes] = useState(true);
-  const [harmonizeEnabled, setHarmonizeEnabled] = useState(false);
+  const [isGenerating, setIsGenerating] = useState(false);
   const { setPreviewColors, setIsCreatingPalette, addPalette } = useColorPalette();
+  
+  // Force React to remount the SparklesIcon when generation starts/ends
+  const iconKey = isGenerating ? 'generating' : 'idle';
 
   const handleCreatePalette = () => {
     setStep(1);
@@ -45,15 +48,49 @@ export default function LeftSidebar() {
   const handleColorChange = (color: string) => {
     const newColors = [...colors];
     newColors[currentColorIndex] = color;
-    
-    // Generate harmonized palette if enabled and this is the first color
-    if (harmonizeEnabled && currentColorIndex === 0) {
-      const harmonizedColors = generateHarmonizedPalette(color);
-      newColors.splice(0, harmonizedColors.length, ...harmonizedColors);
-    }
-    
     setColors(newColors);
     setPreviewColors(newColors);
+  };
+
+  const handleGenerateAIPalette = async () => {
+    setIsGenerating(true);
+    try {
+      // Use the currently selected color as the base
+      const baseColor = colors[currentColorIndex];
+      const harmonizedColors = await generateHarmonizedPalette(baseColor);
+      
+      // Reorder the harmonized colors based on the current role
+      const roleOrder = ["background", "foreground", "primary", "secondary", "accent"];
+      const currentRole = roleOrder[currentColorIndex];
+      
+      // Find where the base color should be in the harmonized array
+      const newColors = [...colors];
+      const colorAssignments = new Map([
+        ["background", 0],  // Lightest color
+        ["foreground", 1],  // Darkest color
+        ["primary", 2],     // Most saturated
+        ["secondary", 3],   // Muted
+        ["accent", 4]       // Complementary
+      ]);
+      
+      // Put the base color in its current position and arrange others
+      harmonizedColors[colorAssignments.get(currentRole)!] = baseColor;
+      
+      // Fill in the other colors
+      roleOrder.forEach((role, index) => {
+        if (index !== currentColorIndex) {
+          newColors[index] = harmonizedColors[colorAssignments.get(role)!];
+        }
+      });
+      
+      setColors(newColors);
+      setPreviewColors(newColors);
+      setCurrentColorIndex(4); // Move to last color
+    } catch (error) {
+      console.error('Failed to generate AI palette:', error);
+    } finally {
+      setIsGenerating(false);
+    }
   };
 
   const handleColorConfirm = () => {
@@ -81,6 +118,16 @@ export default function LeftSidebar() {
   const handlePaletteSelect = (palette: { name: string, colors: string[] }) => {
     setPreviewColors(palette.colors);
     setColors(palette.colors); // This ensures the colors are updated in both states
+  };
+
+  const handleDeletePalette = (index: number, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent palette selection when clicking delete
+    setSavedPalettes(prev => prev.filter((_, i) => i !== index));
+    // Reset preview if the deleted palette was being previewed
+    if (JSON.stringify(colors) === JSON.stringify(savedPalettes[index].colors)) {
+      setPreviewColors(['#000000', '#000000', '#000000', '#000000', '#000000']);
+      setColors(['#000000', '#000000', '#000000', '#000000', '#000000']);
+    }
   };
 
   const toggleSidebar = () => {
@@ -118,16 +165,25 @@ export default function LeftSidebar() {
                         >
                           <div className="saved-palette-header">
                             <h3 className="palette-name">{palette.name}</h3>
-                            <button
-                              className="copy-css-button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                const css = `:root {\n  --background: ${palette.colors[0]};\n  --foreground: ${palette.colors[1]};\n  --primary: ${palette.colors[2]};\n  --secondary: ${palette.colors[3]};\n  --accent: ${palette.colors[4]};\n}`;
-                                navigator.clipboard.writeText(css);
-                              }}
-                            >
-                              Copy CSS
-                            </button>
+                            <div className="palette-actions">
+                              <button
+                                className="copy-css-button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  const css = `:root {\n  --background: ${palette.colors[0]};\n  --foreground: ${palette.colors[1]};\n  --primary: ${palette.colors[2]};\n  --secondary: ${palette.colors[3]};\n  --accent: ${palette.colors[4]};\n}`;
+                                  navigator.clipboard.writeText(css);
+                                }}
+                              >
+                                Copy CSS
+                              </button>
+                              <button
+                                className="delete-palette-btn"
+                                onClick={(e) => handleDeletePalette(index, e)}
+                                title="Delete palette"
+                              >
+                                <TrashIcon className="w-5 h-5" />
+                              </button>
+                            </div>
                           </div>
                           <div className="color-strip">
                             {palette.colors.map((color, colorIndex) => {
@@ -162,21 +218,31 @@ export default function LeftSidebar() {
                   {step === 1 && (
                     <div className="palette-creation-container">
                       <div className="color-picker-container">
-                        <h3>Pick Color {currentColorIndex + 1}</h3>
-                        <div className="harmonizer-toggle">
-                          <label>
-                            <input
-                              type="checkbox"
-                              checked={harmonizeEnabled}
-                              onChange={(e) => setHarmonizeEnabled(e.target.checked)}
-                            />
-                            Auto-harmonize colors
-                          </label>
+                        <div className="color-role-header">
+                          <h3>{["Background", "Foreground", "Primary", "Secondary", "Accent"][currentColorIndex]}</h3>
+                          <button 
+                            className={`ai-generate-btn ${isGenerating ? 'generating' : ''}`}
+                            onClick={handleGenerateAIPalette}
+                            disabled={isGenerating}
+                            title={`Generate color palette using this ${["Background", "Foreground", "Primary", "Secondary", "Accent"][currentColorIndex].toLowerCase()} as the base color`}
+                          >
+                            <SparklesIcon key={iconKey} className="sparkles-icon" />
+                            <div className="generating-rings">
+                              <div></div><div></div><div></div>
+                            </div>
+                          </button>
                         </div>
-                        <HexColorPicker 
-                          color={colors[currentColorIndex]} 
-                          onChange={handleColorChange} 
-                        />
+                        <div className="color-picker-wrapper">
+                          <HexColorPicker 
+                            color={colors[currentColorIndex]} 
+                            onChange={handleColorChange} 
+                          />
+                          {isGenerating && (
+                            <div className="generating-overlay">
+                              <span>Generating palette...</span>
+                            </div>
+                          )}
+                        </div>
                         <div className="color-preview" style={{ backgroundColor: colors[currentColorIndex] }}>
                           <span>{colors[currentColorIndex]}</span>
                         </div>
@@ -184,7 +250,7 @@ export default function LeftSidebar() {
                           className="confirm-btn" 
                           onClick={handleColorConfirm}
                         >
-                          {currentColorIndex < 4 ? 'Next Color' : 'Complete Palette'}
+                          {currentColorIndex < 4 ? 'Next Role' : 'Complete Palette'}
                         </button>
                       </div>
                       <div className="colors-grid">

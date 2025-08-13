@@ -10,6 +10,286 @@
   z-index: 1000;
 }
 
+.color-picker-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.generating-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  color: white;
+  font-size: 14px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+  100% { opacity: 0.6; }
+}
+
+.color-role-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.color-role-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--foreground);
+}
+
+.palette-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.delete-palette-btn {
+  width: 36px;
+  height: 36px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+  transition: all 0.2s ease;
+}
+
+.delete-palette-btn:hover {
+  background: rgba(239, 68, 68, 0.15);
+  transform: scale(1.05);
+}
+
+.delete-palette-btn:active {
+  transform: scale(0.95);
+}
+
+.saved-palette {
+  margin-bottom: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 15px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.saved-palette:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Common button styles */
+.confirm-btn,
+.create-now-btn,
+.save-palette-btn,
+.copy-css-button {
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: linear-gradient(135deg, #FF6B6B 0%, #C44569 100%);
+  color: white;
+  position: relative;
+  overflow: hidden;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.confirm-btn::before,
+.create-now-btn::before,
+.save-palette-btn::before,
+.copy-css-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.confirm-btn:hover::before,
+.create-now-btn:hover::before,
+.save-palette-btn:hover::before,
+.copy-css-button:hover::before {
+  opacity: 1;
+}
+
+.confirm-btn:hover,
+.create-now-btn:hover,
+.save-palette-btn:hover,
+.copy-css-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(196, 69, 105, 0.3);
+}
+
+.confirm-btn:active,
+.create-now-btn:active,
+.save-palette-btn:active,
+.copy-css-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 12px rgba(196, 69, 105, 0.2);
+}
+
+.confirm-btn:disabled,
+.create-now-btn:disabled,
+.save-palette-btn:disabled,
+.copy-css-button:disabled {
+  background: #e5e7eb;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.7;
+}
+
+/* AI Generate button specific styles */
+.ai-generate-btn {
+  width: 42px;
+  height: 42px;
+  padding: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  position: relative;
+  background: linear-gradient(135deg, #3B82F6 0%, #1D4ED8 100%);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+}
+
+.ai-generate-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, rgba(255,255,255,0) 100%);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.ai-generate-btn:hover::before {
+  opacity: 1;
+}
+
+.ai-generate-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+}
+
+.ai-generate-btn:active {
+  transform: translateY(1px) scale(0.95);
+}
+
+.sparkles-icon {
+  width: 20px;
+  height: 20px;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.ai-generate-btn.generating .sparkles-icon {
+  animation: pulse 2s infinite;
+}
+
+.generating-rings {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.ai-generate-btn.generating .generating-rings {
+  opacity: 1;
+}
+
+.generating-rings div {
+  position: absolute;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  animation: ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.generating-rings div:nth-child(2) {
+  animation-delay: -0.3s;
+}
+
+.generating-rings div:nth-child(3) {
+  animation-delay: -0.6s;
+}
+
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.8;
+  }
+  100% {
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% { 
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 0.7;
+    transform: scale(0.95);
+  }
+}
+
+/* Color role header adjustments */
+.color-role-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  padding: 0 0.5rem;
+}
+
+.color-role-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--foreground);
+  font-weight: 600;
+}
+
 .left-sidebar.closed {
   transform: translateX(-300px);
   box-shadow: none;

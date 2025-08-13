@@ -35,13 +35,63 @@ export function hslToHex(h: number, s: number, l: number) {
   return `#${f(0)}${f(8)}${f(4)}`;
 }
 
-export function generateHarmonizedPalette(baseHex: string): string[] {
-  const { h, s, l } = hexToHSL(baseHex);
-  return [
-    baseHex, // base color
-    hslToHex((h + 180) % 360, s, l), // complementary
-    hslToHex((h + 30) % 360, s, l),  // analogous 1
-    hslToHex((h - 30 + 360) % 360, s, l), // analogous 2
-    hslToHex((h + 120) % 360, s, l)  // triadic
-  ];
+// Convert hex to RGB
+function hexToRGB(hex: string): { r: number, g: number, b: number } {
+  hex = hex.replace(/^#/, '');
+  if (hex.length === 3) {
+    hex = hex.split('').map(x => x + x).join('');
+  }
+  return {
+    r: parseInt(hex.slice(0, 2), 16),
+    g: parseInt(hex.slice(2, 4), 16),
+    b: parseInt(hex.slice(4, 6), 16)
+  };
 }
+
+// Convert hex to RGB array for Colormind API
+function hexToRGBArray(hex: string): number[] {
+  const rgb = hexToRGB(hex);
+  return [rgb.r, rgb.g, rgb.b];
+}
+
+// Convert RGB array to hex
+function rgbArrayToHex(rgb: number[]): string {
+  return `#${rgb.map(x => Math.round(x).toString(16).padStart(2, '0')).join('')}`;
+}
+
+export async function generateHarmonizedPalette(baseHex: string): Promise<string[]> {
+  try {
+    // Prepare the input color (lock the first color)
+    const input = [[...hexToRGBArray(baseHex)], "N", "N", "N", "N"];
+    
+    // Call Colormind API
+    const response = await fetch('http://colormind.io/api/', {
+      method: 'POST',
+      body: JSON.stringify({
+        model: 'default',
+        input: input
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to fetch AI color palette');
+    }
+
+    const data = await response.json();
+    
+    // Convert the RGB arrays back to hex colors
+    return data.result.map((rgb: number[]) => rgbArrayToHex(rgb));
+  } catch (error) {
+    console.error('Error generating AI palette:', error);
+    // Fallback to basic complementary colors if AI fails
+    const { h, s, l } = hexToHSL(baseHex);
+    return [
+      baseHex,
+      hslToHex((h + 180) % 360, s, l),
+      hslToHex((h + 30) % 360, s, l),
+      hslToHex((h - 30 + 360) % 360, s, l),
+      hslToHex((h + 120) % 360, s, l)
+    ];
+  }
+}
+

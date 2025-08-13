@@ -20,11 +20,6 @@
   align-items: center;
 }
 
-.preview-footer span:hover {
-  opacity: 1 !important;
-  padding: 1rem 0;
-}
-
 .preview-nav {
   display: flex;
   gap: 2rem;
@@ -36,6 +31,11 @@
   padding: 0.5rem 1rem;
   border-radius: 8px;
   transition: all 0.2s ease;
+}
+
+.preview-nav-item:hover {
+  background-color: var(--accent-color);
+  color: var(--background-color) !important;
 }
 
 .preview-main {
@@ -53,9 +53,22 @@
 
 .preview-title {
   font-size: 2.5rem;
+  position: relative;
+  display: inline-block;
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: -1px;
+}
+
+.preview-title::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 60%;
+  height: 4px;
+  background-color: var(--accent-color);
+  border-radius: 2px;
 }
 
 .preview-subtitle {
