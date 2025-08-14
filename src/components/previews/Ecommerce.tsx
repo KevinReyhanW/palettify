@@ -1,69 +1,161 @@
-'use client';
-
+import {
+  Home,
+  Search, 
+  ShoppingCart, 
+  User, 
+  Menu, 
+  Star, 
+  Heart, 
+  ChevronLeft,
+  ChevronRight
+} from 'lucide-react';
 import './Ecommerce.css';
+
+const products = [
+  {
+    id: 1,
+    name: 'Wireless Headphones',
+    price: 99.99,
+    rating: 4.5,
+    image: 'https://via.placeholder.com/150',
+    isFavorite: false
+  },
+  {
+    id: 2,
+    name: 'Smart Watch',
+    price: 199.99,
+    rating: 4.2,
+    image: 'https://via.placeholder.com/150',
+    isFavorite: true
+  },
+  {
+    id: 3,
+    name: 'Bluetooth Speaker',
+    price: 79.99,
+    rating: 4.7,
+    image: 'https://via.placeholder.com/150',
+    isFavorite: false
+  },
+  {
+    id: 4,
+    name: 'Phone Case',
+    price: 29.99,
+    rating: 4.0,
+    image: 'https://via.placeholder.com/150',
+    isFavorite: false
+  },
+];
 
 export function Ecommerce() {
   return (
-    <div className="e-commerce">
-      <header className="shop-header">
-        <div className="shop-nav">
-          <div className="logo">Store</div>
-          <nav>
-            <ul>
-              <li>New Arrivals</li>
-              <li>Categories</li>
-              <li>Sale</li>
-              <li>Trending</li>
-            </ul>
-          </nav>
-          <div className="cart">Cart (0)</div>
+    <div className="ecommerce-preview">
+      {/* Mobile Header */}
+      <header className="mobile-header">
+        <button className="menu-button">
+          <Menu size={24} />
+        </button>
+        <h1>ShopNow</h1>
+        <div className="mobile-icons">
+          <button className="icon-button">
+            <Search size={20} />
+          </button>
+          <button className="icon-button">
+            <ShoppingCart size={20} />
+            <span className="cart-badge">3</span>
+          </button>
         </div>
       </header>
-      <main className="shop-main">
-        <aside className="filters">
-          <h3 onClick={(e) => {
-            const filters = e.currentTarget.closest('.filters');
-            if (window.innerWidth <= 768) {
-              filters?.classList.toggle('filters-expanded');
-            }
-          }}>Filter Products</h3>
-          <div className="filter-content">
-            <div className="filter-section">
-              <h4>Categories</h4>
-              <label><input type="checkbox" /> Clothing</label>
-              <label><input type="checkbox" /> Accessories</label>
-              <label><input type="checkbox" /> Footwear</label>
-            </div>
-            <div className="filter-section">
-              <h4>Price Range</h4>
-              <label><input type="checkbox" /> Under $50</label>
-              <label><input type="checkbox" /> $50 - $100</label>
-              <label><input type="checkbox" /> Over $100</label>
-            </div>
-          </div>
-        </aside>
-        <div className="products-grid">
-          {[
-            { name: "Sleek Watch", price: 199.99, image: "⌚" },
-            { name: "Designer Bag", price: 299.99, image: "👜" },
-            { name: "Smart Glasses", price: 149.99, image: "👓" },
-            { name: "Running Shoes", price: 89.99, image: "👟" },
-            { name: "Leather Wallet", price: 59.99, image: "💼" },
-            { name: "Wireless Earbuds", price: 129.99, image: "🎧" }
-          ].map((product, index) => (
-            <div key={index} className="product-card">
+
+      {/* Desktop Header */}
+      <header className="desktop-header">
+        <div className="logo">ShopNow</div>
+        <div className="search-bar">
+          <Search size={18} />
+          <input type="text" placeholder="Search products..." />
+        </div>
+        <nav className="nav-links">
+          <a href="#">Home</a>
+          <a href="#">Categories</a>
+          <a href="#">Deals</a>
+        </nav>
+        <div className="user-actions">
+          <button className="icon-button">
+            <User size={20} />
+          </button>
+          <button className="icon-button cart-button">
+            <ShoppingCart size={20} />
+            <span className="cart-badge">3</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Hero Banner */}
+      <div className="hero-banner">
+        <button className="carousel-button left">
+          <ChevronLeft size={24} />
+        </button>
+        <div className="banner-content">
+          <h2>Summer Sale</h2>
+          <p>Up to 50% off on selected items</p>
+          <button className="shop-button">Shop Now</button>
+        </div>
+        <button className="carousel-button right">
+          <ChevronRight size={24} />
+        </button>
+      </div>
+
+      {/* Product Grid */}
+      <div className="product-grid">
+        <h2 className="section-title">Featured Products</h2>
+        <div className="products-container">
+          {products.map(product => (
+            <div key={product.id} className="product-card">
+              <button className={`favorite-button ${product.isFavorite ? 'active' : ''}`}>
+                <Heart size={18} fill={product.isFavorite ? 'currentColor' : 'none'} />
+              </button>
               <div className="product-image">
-                <span className="product-emoji">{product.image}</span>
+                <img src={product.image} alt={product.name} />
               </div>
               <div className="product-info">
                 <h3>{product.name}</h3>
-                <p className="price">${product.price}</p>
-                <button className="add-to-cart-btn">Add to Cart</button>
+                <div className="product-rating">
+                  {[...Array(5)].map((_, i) => (
+                    <Star 
+                      key={i} 
+                      size={16} 
+                      fill={i < Math.floor(product.rating) ? 'currentColor' : 'none'} 
+                    />
+                  ))}
+                  <span>({product.rating})</span>
+                </div>
+                <div className="product-price">${product.price.toFixed(2)}</div>
+                <button className="add-to-cart">Add to Cart</button>
               </div>
             </div>
           ))}
         </div>
-      </main>
+      </div>
+
+      {/* Mobile Bottom Nav */}
+      <nav className="mobile-bottom-nav">
+        <button className="nav-button active">
+          <Home size={20} />
+          <span>Home</span>
+        </button>
+        <button className="nav-button">
+          <Search size={20} />
+          <span>Search</span>
+        </button>
+        <button className="nav-button cart-button">
+          <ShoppingCart size={20} />
+          <span>Cart</span>
+          <span className="cart-badge">3</span>
+        </button>
+        <button className="nav-button">
+          <User size={20} />
+          <span>Account</span>
+        </button>
+      </nav>
     </div>
   );
 }
