@@ -10,7 +10,7 @@ import {
   Menu
 } from 'lucide-react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import './Dashboard.css';
+import '../../styles/components/previews/Dashboard.css';
 
 const data = [
   { name: 'Jan', value: 400 },

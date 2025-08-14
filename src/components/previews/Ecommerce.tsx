@@ -9,7 +9,7 @@ import {
   ChevronLeft,
   ChevronRight
 } from 'lucide-react';
-import './Ecommerce.css';
+import '../../styles/components/previews/Ecommerce.css';
 
 const products = [
   {

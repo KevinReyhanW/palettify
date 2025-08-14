@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon, SparklesIcon, TrashIcon } from '@heroicons/react/24/outline';
-import './LeftSidebar.css';
+import '../styles/components/LeftSidebar.css';
 
 import { HexColorPicker } from 'react-colorful';
 import { useColorPalette } from '@/context/ColorPaletteContext';

@@ -5,7 +5,7 @@ import { useColorPalette } from '@/context/ColorPaletteContext';
 import { Dashboard } from './previews/Dashboard';
 import { Ecommerce } from './previews/Ecommerce';
 import { ModernBlog } from './previews/ModernBlog';
-import './WebPreview.css';
+import '../styles/components/WebPreview.css';
 
 type PreviewType = 'blog' | 'dashboard' | 'ecommerce';
 

@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import { User, BookOpen, Clock, Home, PenTool, Sparkles } from 'lucide-react';
-import './ModernBlog.css';
+import '../../styles/components/previews/ModernBlog.css';
 
 export function ModernBlog() {
   const [activeTab, setActiveTab] = useState('home');

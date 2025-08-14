@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "../styles/global/globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { ColorPaletteProvider } from "@/context/ColorPaletteContext";
 

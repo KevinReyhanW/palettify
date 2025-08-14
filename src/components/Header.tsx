@@ -4,7 +4,7 @@ import { SunIcon, MoonIcon } from '@heroicons/react/24/outline';
 import { useTheme } from '@/context/ThemeContext';
 import Image from 'next/image';
 import logoImage from '@/assets/logo/favicon-32x32.png';
-import './Header.css';
+import '../styles/components/Header.css';
 
 interface HeaderProps {
   onCreatePalette: () => void;

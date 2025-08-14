@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import LeftSidebar from '@/components/LeftSidebar';
 import PaletteRightSidebar from '@/components/PaletteRightSidebar';
 import WebPreview from '@/components/WebPreview';
-import './page.css';
+import '../styles/pages/page.css';
 
 export default function Home() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);

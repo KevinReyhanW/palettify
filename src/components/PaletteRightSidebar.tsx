@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useColorPalette } from '@/context/ColorPaletteContext';
 import { useState, useEffect } from 'react';
 import { ChevronRightIcon, ChevronLeftIcon, ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
-import './PaletteRightSidebar.css';
+import '../styles/components/PaletteRightSidebar.css';
 
 const PALETTES_PER_PAGE = 5;
 const MOBILE_BREAKPOINT = 768;
