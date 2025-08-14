@@ -6,24 +6,25 @@ export interface Palette {
 }
 
 export const PREDEFINED_PALETTES: Palette[] = [
-{
+  {
     id: 0,
-    name: "Material Ocean",
-    colors: ["#0F111A", "#3B4252", "#4F5B93", "#8FBCBB", "#88C0D0"],
-    description: "Inspired by the deep ocean, perfect for dark themes"
+    name: "Autumn Harvest",
+    colors: ["#9C4722", "#D68B45", "#FFCE78", "#FFE2AD", "#FFF4E3"],
+    description: "Warm autumn color palette"
   },
   {
     id: 1,
-    name: "Spotify",
-    colors: ["#1DB954", "#191414", "#FFFFFF", "#535353", "#B3B3B3"],
-    description: "Spotify's iconic brand colors"
+    name: "Arctic Aurora",
+    colors: ["#112F41", "#068587", "#4FB99F", "#F2B134", "#ED553B"],
+    description: "Inspired by northern lights"
   },
   {
     id: 2,
-    name: "Instagram Gradient",
-    colors: ["#405DE6", "#5851DB", "#833AB4", "#C13584", "#E1306C"],
-    description: "Instagram's vibrant gradient palette"
+    name: "Notion",
+    colors: ["#37352F", "#9B9A97", "#D4D4D2", "#EBEBEA", "#FFFFFF"],
+    description: "Notion's default color scheme"
   },
+
   {
     id: 3,
     name: "Forest Fresh",
@@ -56,15 +57,15 @@ export const PREDEFINED_PALETTES: Palette[] = [
   },
   {
     id: 8,
-    name: "Autumn Harvest",
-    colors: ["#9C4722", "#D68B45", "#FFCE78", "#FFE2AD", "#FFF4E3"],
-    description: "Warm autumn color palette"
+    name: "Material Ocean",
+    colors: ["#0F111A", "#3B4252", "#4F5B93", "#8FBCBB", "#88C0D0"],
+    description: "Inspired by the deep ocean, perfect for dark themes"
   },
   {
     id: 9,
-    name: "Arctic Aurora",
-    colors: ["#112F41", "#068587", "#4FB99F", "#F2B134", "#ED553B"],
-    description: "Inspired by northern lights"
+    name: "Spotify",
+    colors: ["#1DB954", "#191414", "#FFFFFF", "#535353", "#B3B3B3"],
+    description: "Spotify's iconic brand colors"
   },
   {
     id: 10,
@@ -102,7 +103,7 @@ export const PREDEFINED_PALETTES: Palette[] = [
     colors: ["#2B0F54", "#AB2346", "#FF6B6B", "#FFE66D", "#4ECDC4"],
     description: "80s inspired retro color scheme"
   },
-    {
+  {
     id: 16,
     name: "Material Design",
     colors: ["#FF5252", "#FF4081", "#E040FB", "#7C4DFF", "#536DFE"],
@@ -170,9 +171,9 @@ export const PREDEFINED_PALETTES: Palette[] = [
   },
   {
     id: 27,
-    name: "Notion",
-    colors: ["#37352F", "#9B9A97", "#D4D4D2", "#EBEBEA", "#FFFFFF"],
-    description: "Notion's default color scheme"
+    name: "Instagram Gradient",
+    colors: ["#405DE6", "#5851DB", "#833AB4", "#C13584", "#E1306C"],
+    description: "Instagram's vibrant gradient palette"
   },
   {
     id: 28,

@@ -14,6 +14,7 @@ export default function PaletteRightSidebar() {
   const [page, setPage] = useState(0);
   const [isOpen, setIsOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -30,10 +31,13 @@ export default function PaletteRightSidebar() {
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
-  const totalPages = Math.ceil(palettes.length / PALETTES_PER_PAGE);
+  const filteredPalettes = palettes.filter(palette => 
+    palette.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+  const totalPages = Math.ceil(filteredPalettes.length / PALETTES_PER_PAGE);
   const startIndex = page * PALETTES_PER_PAGE;
-  const endIndex = Math.min(startIndex + PALETTES_PER_PAGE, palettes.length);
-  const currentPalettes = palettes.slice(startIndex, endIndex);
+  const endIndex = Math.min(startIndex + PALETTES_PER_PAGE, filteredPalettes.length);
+  const currentPalettes = filteredPalettes.slice(startIndex, endIndex);
 
   const goToNextPage = () => {
     if (page < totalPages - 1) {
@@ -49,8 +53,10 @@ export default function PaletteRightSidebar() {
 
   const handlePaletteClick = (index: number) => {
     if (isCreatingPalette) return;
-    setCurrentPaletteIndex(startIndex + index);
-    setPreviewColors(palettes[startIndex + index].colors);
+    const filteredPaletteIndex = startIndex + index;
+    const globalPaletteIndex = palettes.findIndex(p => p === filteredPalettes[filteredPaletteIndex]);
+    setCurrentPaletteIndex(globalPaletteIndex);
+    setPreviewColors(palettes[globalPaletteIndex].colors);
   };
 
   return (
@@ -65,6 +71,18 @@ export default function PaletteRightSidebar() {
           : (isOpen ? <ChevronRightIcon className="w-6 h-6" /> : <ChevronLeftIcon className="w-6 h-6" />)
         }
       </button>
+      <div className="search-container">
+        <input
+          type="text"
+          placeholder="Search palettes..."
+          value={searchTerm}
+          onChange={(e) => {
+            setSearchTerm(e.target.value);
+            setPage(0); // Reset to first page when searching
+          }}
+          className="search-input"
+        />
+      </div>
       <AnimatePresence mode="wait">
         <motion.div
           key={page}
