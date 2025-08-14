@@ -15,7 +15,7 @@ export function ModernBlog() {
   return (
     <div className="modern-blog">
       <header className="blog-header">
-        <div className="header-content">
+        <div className="blog-header-content">
           <div className="logo">
             <PenTool size={20} color="var(--accent-color)" />
             <span>PaletteBlog</span>
