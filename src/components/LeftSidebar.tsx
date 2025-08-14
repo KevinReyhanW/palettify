@@ -1,7 +1,7 @@
 'use client';
 
 import { motion, AnimatePresence } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeftIcon, ChevronRightIcon, SparklesIcon, TrashIcon } from '@heroicons/react/24/outline';
 import '../styles/components/LeftSidebar.css';
 
@@ -20,8 +20,6 @@ const STEPS: PaletteCreationStep[] = [
   { title: 'Save Palette', description: 'Name and save your custom color palette' },
 ];
 
-import Values from 'values.js';
-
 export default function LeftSidebar() {
   const [isOpen, setIsOpen] = useState(false);
   const [step, setStep] = useState(0);
@@ -31,10 +29,45 @@ export default function LeftSidebar() {
   const [savedPalettes, setSavedPalettes] = useState<Array<{ name: string, colors: string[] }>>([]);
   const [showPalettes, setShowPalettes] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [hexInput, setHexInput] = useState('');
   const { setPreviewColors, setIsCreatingPalette, addPalette } = useColorPalette();
   
-  // Force React to remount the SparklesIcon when generation starts/ends
   const iconKey = isGenerating ? 'generating' : 'idle';
+
+  useEffect(() => {
+    setHexInput(colors[currentColorIndex] || '#');
+  }, [colors, currentColorIndex]);
+
+  const handleHexInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let value = e.target.value;
+    
+    // If the input is empty, set it to # only
+    if (value === '') {
+      setHexInput('#');
+      return;
+    }
+
+    // Always ensure # is at the start
+    if (!value.startsWith('#')) {
+      value = '#' + value;
+    }
+
+    // Remove any non-hex characters after #
+    value = '#' + value.slice(1).replace(/[^0-9A-Fa-f]/g, '');
+
+    // Convert to uppercase
+    value = value.toUpperCase();
+    
+    setHexInput(value);
+    
+    // Only update colors if we have a valid 6-digit hex
+    if (/^#[0-9A-Fa-f]{6}$/.test(value)) {
+      const newColors = [...colors];
+      newColors[currentColorIndex] = value;
+      setColors(newColors);
+      setPreviewColors(newColors);
+    }
+  };
 
   const handleCreatePalette = () => {
     setStep(1);
@@ -46,46 +79,43 @@ export default function LeftSidebar() {
   };
 
   const handleColorChange = (color: string) => {
+    const upperColor = color.toUpperCase();
     const newColors = [...colors];
-    newColors[currentColorIndex] = color;
+    newColors[currentColorIndex] = upperColor;
     setColors(newColors);
     setPreviewColors(newColors);
+    setHexInput(upperColor);
   };
 
   const handleGenerateAIPalette = async () => {
     setIsGenerating(true);
     try {
-      // Use the currently selected color as the base
-      const baseColor = colors[currentColorIndex];
+      const baseColor = colors[currentColorIndex].toUpperCase();
       const harmonizedColors = await generateHarmonizedPalette(baseColor);
       
-      // Reorder the harmonized colors based on the current role
       const roleOrder = ["background", "foreground", "primary", "secondary", "accent"];
       const currentRole = roleOrder[currentColorIndex];
       
-      // Find where the base color should be in the harmonized array
       const newColors = [...colors];
       const colorAssignments = new Map([
-        ["background", 0],  // Lightest color
-        ["foreground", 1],  // Darkest color
-        ["primary", 2],     // Most saturated
-        ["secondary", 3],   // Muted
-        ["accent", 4]       // Complementary
+        ["background", 0],
+        ["foreground", 1],
+        ["primary", 2],
+        ["secondary", 3],
+        ["accent", 4]
       ]);
       
-      // Put the base color in its current position and arrange others
       harmonizedColors[colorAssignments.get(currentRole)!] = baseColor;
       
-      // Fill in the other colors
       roleOrder.forEach((role, index) => {
         if (index !== currentColorIndex) {
-          newColors[index] = harmonizedColors[colorAssignments.get(role)!];
+          newColors[index] = harmonizedColors[colorAssignments.get(role)!].toUpperCase();
         }
       });
       
       setColors(newColors);
       setPreviewColors(newColors);
-      setCurrentColorIndex(4); // Move to last color
+      setCurrentColorIndex(4);
     } catch (error) {
       console.error('Failed to generate AI palette:', error);
     } finally {
@@ -104,11 +134,13 @@ export default function LeftSidebar() {
   const handlePaletteConfirm = () => {
     if (!paletteName.trim()) return;
     
-    setSavedPalettes(prev => [{
+    const newPalette = {
       name: paletteName,
       colors: [...colors]
-    }, ...prev]);
+    };
     
+    setSavedPalettes(prev => [newPalette, ...prev]);
+    addPalette(Date.now().toString(), newPalette.colors);
     setPaletteName('');
     setStep(0);
     setShowPalettes(true);
@@ -117,13 +149,12 @@ export default function LeftSidebar() {
 
   const handlePaletteSelect = (palette: { name: string, colors: string[] }) => {
     setPreviewColors(palette.colors);
-    setColors(palette.colors); // This ensures the colors are updated in both states
+    setColors(palette.colors);
   };
 
   const handleDeletePalette = (index: number, e: React.MouseEvent) => {
-    e.stopPropagation(); // Prevent palette selection when clicking delete
+    e.stopPropagation();
     setSavedPalettes(prev => prev.filter((_, i) => i !== index));
-    // Reset preview if the deleted palette was being previewed
     if (JSON.stringify(colors) === JSON.stringify(savedPalettes[index].colors)) {
       setPreviewColors(['#000000', '#000000', '#000000', '#000000', '#000000']);
       setColors(['#000000', '#000000', '#000000', '#000000', '#000000']);
@@ -132,7 +163,6 @@ export default function LeftSidebar() {
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
-    // Add/remove no-scroll class on body for mobile
     if (window.innerWidth <= 768) {
       document.body.classList.toggle('no-scroll', !isOpen);
     }
@@ -243,8 +273,19 @@ export default function LeftSidebar() {
                             </div>
                           )}
                         </div>
-                        <div className="color-preview" style={{ backgroundColor: colors[currentColorIndex] }}>
-                          <span>{colors[currentColorIndex]}</span>
+                        <div 
+                          className="color-preview" 
+                          style={{ backgroundColor: colors[currentColorIndex] }}
+                        >
+                          <input
+                            type="text"
+                            value={hexInput}
+                            onChange={handleHexInputChange}
+                            placeholder="#RRGGBB"
+                            className="hex-input"
+                            pattern="^#[0-9A-Fa-f]{6}$"
+                            maxLength={7}
+                          />
                         </div>
                         <button 
                           className="confirm-btn" 
@@ -274,6 +315,7 @@ export default function LeftSidebar() {
                                 <span className="color-label">{labels[index]}</span>
                                 <span className="color-value">{color}</span>
                               </div>
+                              <div className="color-hex">{color}</div>
                             </div>
                           );
                         })}
@@ -311,7 +353,6 @@ export default function LeftSidebar() {
                       </div>
                     </div>
                   )}
-
                 </>
               )}
             </div>

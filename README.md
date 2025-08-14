@@ -13,6 +13,8 @@ Palettify is a sophisticated web application designed to help designers and deve
 - **Smart Color Selection**:
   - **AI-Powered Color Suggestions**: Input one color and get 4 AI-recommended complementary colors (powered by Colormind.io)
   - **Custom Palette Creation**: Create your own palette by picking exactly 5 colors
+  - **Precise Hex Color Input**: Direct hex code input with automatic formatting and validation
+  - **Visual Color Preview**: Real-time color display with hex codes for accurate color selection
   - **50+ Pre-built Color Palettes**: Including popular design systems and brand-inspired schemes
 
 - **Interactive Features**:
