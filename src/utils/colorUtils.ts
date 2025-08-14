@@ -65,9 +65,12 @@ export async function generateHarmonizedPalette(baseHex: string): Promise<string
     // Prepare the input color (lock the first color)
     const input = [[...hexToRGBArray(baseHex)], "N", "N", "N", "N"];
     
-    // Call Colormind API
-    const response = await fetch('http://colormind.io/api/', {
+    // Call our API route that proxies to Colormind
+    const response = await fetch('/api/palette', {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify({
         model: 'default',
         input: input
