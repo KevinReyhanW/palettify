@@ -4,6 +4,7 @@
   color: var(--foreground-color);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   line-height: 1.5;
+  min-height: 70vh;
   display: flex;
   flex-direction: column;
   border-radius: 16px;

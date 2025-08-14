@@ -4,6 +4,7 @@
   grid-template-columns: 240px 1fr;
   grid-template-rows: auto 1fr;
   border-radius: 16px;
+  min-height: 70vh;
   background-color: var(--background-color);
   color: var(--foreground-color);
   overflow: hidden;
