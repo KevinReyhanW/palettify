@@ -17,7 +17,7 @@ const products = [
     name: 'Wireless Headphones',
     price: 99.99,
     rating: 4.5,
-    image: 'https://via.placeholder.com/150',
+    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8aGVhZHBob25lc3xlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
     isFavorite: false
   },
   {
@@ -25,7 +25,7 @@ const products = [
     name: 'Smart Watch',
     price: 199.99,
     rating: 4.2,
-    image: 'https://via.placeholder.com/150',
+    image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8c21hcnQlMjB3YXRjaHxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
     isFavorite: true
   },
   {
@@ -33,7 +33,7 @@ const products = [
     name: 'Bluetooth Speaker',
     price: 79.99,
     rating: 4.7,
-    image: 'https://via.placeholder.com/150',
+    image: 'https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Ymx1ZXRvb3RoJTIwc3BlYWtlcnxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60',
     isFavorite: false
   },
   {
@@ -41,9 +41,9 @@ const products = [
     name: 'Phone Case',
     price: 29.99,
     rating: 4.0,
-    image: 'https://via.placeholder.com/150',
+    image: 'https://images.unsplash.com/photo-1601784551446-20c9e07cdbdb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cGhvbmUlMjBjYXNlfGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60',
     isFavorite: false
-  },
+  }
 ];
 
 export function Ecommerce() {
