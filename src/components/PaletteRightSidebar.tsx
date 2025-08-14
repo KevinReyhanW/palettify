@@ -131,7 +131,7 @@ export default function PaletteRightSidebar() {
       </AnimatePresence>
       <div className="palette-navigation">
         <button
-          className="nav-button"
+          className="nav-button-sidebar"
           onClick={goToPreviousPage}
           disabled={page === 0}
         >
@@ -141,7 +141,7 @@ export default function PaletteRightSidebar() {
           Page {page + 1} of {totalPages}
         </span>
         <button
-          className="nav-button"
+          className="nav-button-sidebar"
           onClick={goToNextPage}
           disabled={page === totalPages - 1}
         >

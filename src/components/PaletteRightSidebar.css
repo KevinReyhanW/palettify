@@ -193,7 +193,7 @@
   margin-top: 2rem;
 }
 
-.nav-button {
+.nav-button-sidebar {
   background: var(--background);
   border: 1px solid var(--foreground);
   color: var(--foreground);
@@ -204,12 +204,12 @@
   transition: all 0.2s ease;
 }
 
-.nav-button:hover {
+.nav-button-sidebar:hover {
   background: var(--foreground);
   color: var(--background);
 }
 
-.nav-button:disabled {
+.nav-button-sidebar:disabled {
   opacity: 0.3;
   cursor: not-allowed;
 }
@@ -283,7 +283,7 @@
     padding: 0.5rem;
   }
 
-  .nav-button {
+  .nav-button-sidebar {
     padding: 0.4rem 0.8rem;
     font-size: 0.9rem;
   }
