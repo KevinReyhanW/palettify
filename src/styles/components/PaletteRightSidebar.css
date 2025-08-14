@@ -331,7 +331,7 @@
   }
 
   /* Add a subtle drag indicator */
-  .toggle-button::before {
+  /* .toggle-button::before {
     content: '';
     position: absolute;
     top: 8px;
@@ -342,5 +342,5 @@
     background: var(--foreground);
     opacity: 0.3;
     border-radius: 2px;
-  }
+  } */
 }

@@ -12,22 +12,21 @@ const MOBILE_BREAKPOINT = 768;
 export default function PaletteRightSidebar() {
   const { palettes, currentPaletteIndex, setCurrentPaletteIndex, setPreviewColors, isCreatingPalette } = useColorPalette();
   const [page, setPage] = useState(0);
-  const [isOpen, setIsOpen] = useState(true);
   const [isMobile, setIsMobile] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
+  const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
+    setHasMounted(true);
     const checkIsMobile = () => {
-      setIsMobile(window.innerWidth <= MOBILE_BREAKPOINT);
+      const mobile = window.innerWidth <= MOBILE_BREAKPOINT;
+      setIsMobile(mobile);
+      setIsOpen(!mobile);
     };
     
-    // Check initially
     checkIsMobile();
-    
-    // Add event listener for window resize
     window.addEventListener('resize', checkIsMobile);
-    
-    // Cleanup
     return () => window.removeEventListener('resize', checkIsMobile);
   }, []);
 
@@ -59,6 +58,10 @@ export default function PaletteRightSidebar() {
     setPreviewColors(palettes[globalPaletteIndex].colors);
   };
 
+  if (!hasMounted) {
+    return null;
+  }
+
   return (
     <div className={`palette-right-sidebar ${isOpen ? 'open' : 'closed'}`}>
       <button 
@@ -71,101 +74,106 @@ export default function PaletteRightSidebar() {
           : (isOpen ? <ChevronRightIcon className="w-6 h-6" /> : <ChevronLeftIcon className="w-6 h-6" />)
         }
       </button>
-      <div className="search-container">
-        <input
-          type="text"
-          placeholder="Search palettes..."
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setPage(0); // Reset to first page when searching
-          }}
-          className="search-input"
-        />
-      </div>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={page}
-          className="palette-container"
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -20 }}
-          transition={{ duration: 0.3 }}
-        >
-          {currentPalettes.map((palette, index) => (
-            <div
-              key={startIndex + index}
-              className={`palette-set ${isCreatingPalette ? 'disabled' : ''}`}
-              onClick={() => handlePaletteClick(index)}
-              style={{ 
-                opacity: (startIndex + index === currentPaletteIndex && !isCreatingPalette) ? 1 : 0.7,
-                transform: (startIndex + index === currentPaletteIndex && !isCreatingPalette) ? 'scale(1.02)' : 'scale(1)',
-                cursor: isCreatingPalette ? 'not-allowed' : 'pointer'
+      
+      {isOpen && (
+        <>
+          <div className="search-container">
+            <input
+              type="text"
+              placeholder="Search palettes..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setPage(0);
               }}
+              className="search-input"
+            />
+          </div>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={page}
+              className="palette-container"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3 }}
             >
-              <div className="palette-info">
-                <div className="palette-header">
-                  <h3 className="palette-name">{palette.name}</h3>
-                  <button
-                    className="copy-css-button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      const semanticNames = ['background', 'foreground', 'primary', 'secondary', 'accent'];
-                      const cssVars = palette.colors.map((color, idx) => 
-                        `  --${idx < semanticNames.length ? semanticNames[idx] : `color-${idx + 1}`}: ${color};`
-                      ).join('\n');
-                      const css = `:root {\n${cssVars}\n}`;
-                      navigator.clipboard.writeText(css);
-                    }}
-                    title="Copy CSS Variables"
-                  >
-                    Copy CSS
-                  </button>
-                </div>
-              </div>
-              <div className="palette-colors">
-                {palette.colors.map((color, colorIndex) => {
-                  const semanticNames = ['background', 'foreground', 'primary', 'secondary', 'accent'];
-                  const semanticName = colorIndex < semanticNames.length ? semanticNames[colorIndex] : `color-${colorIndex + 1}`;
-                  return (
-                    <div
-                      key={colorIndex}
-                      className="color-swatch"
-                      style={{ backgroundColor: color }}
-                      title={`${semanticName}: ${color}`}
-                      suppressHydrationWarning
-                    >
-                      <div className="color-info">
-                        <span className="color-hex">{color}</span>
-                        <span className="color-semantic-name">{semanticName}</span>
-                      </div>
+              {currentPalettes.map((palette, index) => (
+                <div
+                  key={startIndex + index}
+                  className={`palette-set ${isCreatingPalette ? 'disabled' : ''}`}
+                  onClick={() => handlePaletteClick(index)}
+                  style={{ 
+                    opacity: (startIndex + index === currentPaletteIndex && !isCreatingPalette) ? 1 : 0.7,
+                    transform: (startIndex + index === currentPaletteIndex && !isCreatingPalette) ? 'scale(1.02)' : 'scale(1)',
+                    cursor: isCreatingPalette ? 'not-allowed' : 'pointer'
+                  }}
+                >
+                  <div className="palette-info">
+                    <div className="palette-header">
+                      <h3 className="palette-name">{palette.name}</h3>
+                      <button
+                        className="copy-css-button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          const semanticNames = ['background', 'foreground', 'primary', 'secondary', 'accent'];
+                          const cssVars = palette.colors.map((color, idx) => 
+                            `  --${idx < semanticNames.length ? semanticNames[idx] : `color-${idx + 1}`}: ${color};`
+                          ).join('\n');
+                          const css = `:root {\n${cssVars}\n}`;
+                          navigator.clipboard.writeText(css);
+                        }}
+                        title="Copy CSS Variables"
+                      >
+                        Copy CSS
+                      </button>
                     </div>
-                  );
-                })}
-              </div>
-            </div>
-          ))}
-        </motion.div>
-      </AnimatePresence>
-      <div className="palette-navigation">
-        <button
-          className="nav-button-sidebar"
-          onClick={goToPreviousPage}
-          disabled={page === 0}
-        >
-          Previous
-        </button>
-        <span className="palette-indicator">
-          Page {page + 1} of {totalPages}
-        </span>
-        <button
-          className="nav-button-sidebar"
-          onClick={goToNextPage}
-          disabled={page === totalPages - 1}
-        >
-          Next
-        </button>
-      </div>
+                  </div>
+                  <div className="palette-colors">
+                    {palette.colors.map((color, colorIndex) => {
+                      const semanticNames = ['background', 'foreground', 'primary', 'secondary', 'accent'];
+                      const semanticName = colorIndex < semanticNames.length ? semanticNames[colorIndex] : `color-${colorIndex + 1}`;
+                      return (
+                        <div
+                          key={colorIndex}
+                          className="color-swatch"
+                          style={{ backgroundColor: color }}
+                          title={`${semanticName}: ${color}`}
+                          suppressHydrationWarning
+                        >
+                          <div className="color-info">
+                            <span className="color-hex">{color}</span>
+                            <span className="color-semantic-name">{semanticName}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+          <div className="palette-navigation">
+            <button
+              className="nav-button-sidebar"
+              onClick={goToPreviousPage}
+              disabled={page === 0}
+            >
+              Previous
+            </button>
+            <span className="palette-indicator">
+              Page {page + 1} of {totalPages}
+            </span>
+            <button
+              className="nav-button-sidebar"
+              onClick={goToNextPage}
+              disabled={page === totalPages - 1}
+            >
+              Next
+            </button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
