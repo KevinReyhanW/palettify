@@ -6,7 +6,7 @@ import Image from 'next/image';
 import logoImage from '@/assets/logo/favicon-32x32.png';
 import '../styles/components/Header.css';
 
-interface HeaderProps {}
+type HeaderProps = object;
 
 export default function Header({}: HeaderProps) {
   const { theme, toggleTheme } = useTheme();
