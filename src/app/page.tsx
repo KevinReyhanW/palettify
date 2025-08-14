@@ -8,15 +8,13 @@ import WebPreview from '@/components/WebPreview';
 import '../styles/pages/page.css';
 
 export default function Home() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-
   const handleCreatePalette = () => {
-    setIsSidebarOpen(true);
+    // Handle palette creation
   };
 
   return (
     <main className="main-container">
-      <Header onCreatePalette={handleCreatePalette} />
+      <Header />
       <div className="content-container">
         <LeftSidebar />
         <PaletteRightSidebar />

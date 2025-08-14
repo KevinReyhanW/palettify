@@ -125,7 +125,7 @@ export function ModernBlog() {
             </div>
             <h2 className="section-title">About PaletteBlog</h2>
             <p className="about-text">
-              We're dedicated to exploring the world of color theory and design principles. 
+              We&apos;re dedicated to exploring the world of color theory and design principles. 
               Our mission is to help designers create more effective and beautiful interfaces.
             </p>
             <div className="about-meta">

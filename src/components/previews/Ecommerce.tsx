@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import {
   Home,
   Search, 
@@ -114,7 +115,7 @@ export function Ecommerce() {
                 <Heart size={18} fill={product.isFavorite ? 'currentColor' : 'none'} />
               </button>
               <div className="product-image">
-                <img src={product.image} alt={product.name} />
+                <Image src={product.image} alt={product.name} width={200} height={200} />
               </div>
               <div className="product-info">
                 <h3>{product.name}</h3>

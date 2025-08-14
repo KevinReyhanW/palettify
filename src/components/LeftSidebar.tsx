@@ -27,7 +27,6 @@ export default function LeftSidebar() {
   const [currentColorIndex, setCurrentColorIndex] = useState(0);
   const [paletteName, setPaletteName] = useState('');
   const [savedPalettes, setSavedPalettes] = useState<Array<{ name: string, colors: string[] }>>([]);
-  const [showPalettes, setShowPalettes] = useState(true);
   const [isGenerating, setIsGenerating] = useState(false);
   const [hexInput, setHexInput] = useState('');
   const { setPreviewColors, setIsCreatingPalette, addPalette } = useColorPalette();
@@ -74,7 +73,6 @@ export default function LeftSidebar() {
     setPaletteName('');
     setColors(['#000000', '#000000', '#000000', '#000000', '#000000']);
     setCurrentColorIndex(0);
-    setShowPalettes(false);
     setIsCreatingPalette(true);
   };
 
@@ -143,7 +141,6 @@ export default function LeftSidebar() {
     addPalette(Date.now().toString(), newPalette.colors);
     setPaletteName('');
     setStep(0);
-    setShowPalettes(true);
     setIsCreatingPalette(false);
   };
 
