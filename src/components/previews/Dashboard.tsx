@@ -30,7 +30,7 @@ export function Dashboard() {
         <button className="menu-button">
           <Menu size={24} />
         </button>
-        <h1>Dashboard</h1>
+        <h1>DashingBoard</h1>
         <button className="notification-button">
           <Bell size={24} />
         </button>
@@ -38,7 +38,7 @@ export function Dashboard() {
 
       {/* Desktop Sidebar */}
       <aside className="sidebar">
-        <div className="dashboard-title">Dashboard</div>
+        <div className="dashboard-title">DashingBoard</div>
         <nav>
           <ul>
             <li className="active">
