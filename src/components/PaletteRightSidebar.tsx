@@ -16,19 +16,22 @@ export default function PaletteRightSidebar() {
   const [searchTerm, setSearchTerm] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [hasMounted, setHasMounted] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   useEffect(() => {
     setHasMounted(true);
     const checkIsMobile = () => {
       const mobile = window.innerWidth <= MOBILE_BREAKPOINT;
       setIsMobile(mobile);
-      setIsOpen(!mobile);
+      if (!isInputFocused) {
+        setIsOpen(!mobile);
+      }
     };
     
     checkIsMobile();
     window.addEventListener('resize', checkIsMobile);
     return () => window.removeEventListener('resize', checkIsMobile);
-  }, []);
+  }, [isInputFocused]);
 
   const filteredPalettes = palettes.filter(palette => 
     palette.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -87,6 +90,8 @@ export default function PaletteRightSidebar() {
                 setPage(0);
               }}
               className="search-input"
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
             />
           </div>
           <AnimatePresence mode="wait">
