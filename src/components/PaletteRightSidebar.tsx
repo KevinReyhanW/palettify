@@ -54,7 +54,6 @@ export default function PaletteRightSidebar() {
   };
 
   const handlePaletteClick = (index: number) => {
-    if (isCreatingPalette) return;
     const filteredPaletteIndex = startIndex + index;
     const globalPaletteIndex = palettes.findIndex(p => p === filteredPalettes[filteredPaletteIndex]);
     setCurrentPaletteIndex(globalPaletteIndex);
@@ -106,12 +105,12 @@ export default function PaletteRightSidebar() {
               {currentPalettes.map((palette, index) => (
                 <div
                   key={startIndex + index}
-                  className={`palette-set ${isCreatingPalette ? 'disabled' : ''}`}
+                  className="palette-set"
                   onClick={() => handlePaletteClick(index)}
                   style={{ 
-                    opacity: (startIndex + index === currentPaletteIndex && !isCreatingPalette) ? 1 : 0.7,
-                    transform: (startIndex + index === currentPaletteIndex && !isCreatingPalette) ? 'scale(1.02)' : 'scale(1)',
-                    cursor: isCreatingPalette ? 'not-allowed' : 'pointer'
+                    opacity: startIndex + index === currentPaletteIndex ? 1 : 0.7,
+                    transform: startIndex + index === currentPaletteIndex ? 'scale(1.02)' : 'scale(1)',
+                    cursor: 'pointer'
                   }}
                 >
                   <div className="palette-info">
